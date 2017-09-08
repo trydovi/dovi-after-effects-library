@@ -30,7 +30,7 @@ _bakeLayer = (layer)->
         if ((property.canSetExpression) && (property.expressionEnabled))
             property.selected = true;
     
-        app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes"));
+    app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes"));
 
 # ---------------------------------------------------------
 # 
