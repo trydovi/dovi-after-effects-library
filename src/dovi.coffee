@@ -3,12 +3,26 @@
 
 # ---------------------------------------------------------
 # 
-# Will bake keyframes in a given comp
+# Will bake all layers of given comp or will accept and
+# pass along a single layer as well.
 # 
 # ---------------------------------------------------------
-_bake = (comp) ->
+_bake = (target) ->
+    if(target instanceof CompItem)
+        for i in [1..target.numLayers]
+            _bakeLayer(target.layers[i])
+    else if(target instanceof AVLayer)
+        _bakeLayer(target)
+
+    
+# ---------------------------------------------------------
+# 
+# Will bake all properties on a given layer
+# 
+# ---------------------------------------------------------
+_bakeLayer = (layer)->
+    comp = layer.containingComp
     comp.openInViewer();
-    layer = _layer(comp, "Controller")
     layer.outPoint = 1 * layer.containingComp.frameDuration
     for i in [1..layer.Effects.numProperties]
         effect = layer.Effects.property(i)
@@ -17,7 +31,6 @@ _bake = (comp) ->
             property.selected = true;
     
         app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes"));
-
 
 # ---------------------------------------------------------
 # 
@@ -58,8 +71,6 @@ _fitLayer = (layer) ->
         scale = layer.containingComp.height / size.height * 100
 
     layer.property("Scale").setValue [scale, scale]
-
-
 
 # alert(_layer("@ Texts", "title-01").property("Source Text").value)
 # _fitLayer(_layer("> Logo", "logo"))
