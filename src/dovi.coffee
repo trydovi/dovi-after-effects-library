@@ -1,5 +1,20 @@
+
 `#target aftereffects`
 
+# ---------------------------------------------------------
+# 
+# Will bake keyframes in a given comp
+# 
+# ---------------------------------------------------------
+_bake = (comp) ->
+    layer = _layer(comp, "Controller")
+    layer.outPoint = 1 * layer.containingComp.frameDuration
+    for i in [1..layer.Effects.numProperties]
+        effect = layer.Effects.property(i)
+        property = effect.property(1)
+        property.selected = true;
+        app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes"));
+        property.selected = false;
 
 # ---------------------------------------------------------
 # 
