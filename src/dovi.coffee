@@ -2,10 +2,10 @@
 `#target aftereffects`
 
 # ---------------------------------------------------------
-# 
+#
 # Will bake all layers of given comp or will accept and
 # pass along a single layer as well.
-# 
+#
 # ---------------------------------------------------------
 _bake = (target) ->
     if(target instanceof CompItem)
@@ -14,11 +14,11 @@ _bake = (target) ->
     else if(target instanceof AVLayer)
         _bakeLayer(target)
 
-    
+
 # ---------------------------------------------------------
-# 
+#
 # Will bake all properties on a given layer
-# 
+#
 # ---------------------------------------------------------
 _bakeLayer = (layer)->
     comp = layer.containingComp
@@ -29,37 +29,44 @@ _bakeLayer = (layer)->
         property = effect.property(1)
         if ((property.canSetExpression) && (property.expressionEnabled))
             property.selected = true;
-    
+
     app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes"));
 
 # ---------------------------------------------------------
-# 
+#
 # Returns the first layer with a given comp and layer name
-# 
+#
 # ---------------------------------------------------------
-_layer = (composition, layerName) -> 
+_layer = (composition, layerName) ->
     if (typeof composition is "string")
         composition = _comp(composition)
 
     return esy.composition.first(composition, layerName)
 
-
 # ---------------------------------------------------------
-# 
+#
 # Returns the first comp with a given comp name
-# 
+#
 # ---------------------------------------------------------
 _comp = (compositionName) ->
     return esy.project.first compositionName
 
+# ---------------------------------------------------------
+#
+# Cancels file replacement if path is not provided
+#
+# ---------------------------------------------------------
+_replace = (source, path) ->
+    if (path)
+        source.replace(new File(path))
 
 # ---------------------------------------------------------
-# 
+#
 # Fits the layer horizontally or vertically
 # to fill comp without cropping.
-# 
+#
 # ---------------------------------------------------------
-_fitLayer = (layer) ->    
+_fitLayer = (layer) ->
     size = layer.sourceRectAtTime 0, false
     compRatio = layer.containingComp.width / layer.containingComp.height
     mediaRatio = layer.width / layer.height
